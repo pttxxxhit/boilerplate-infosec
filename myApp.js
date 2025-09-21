@@ -6,7 +6,7 @@ app.use(helmet.hidePoweredBy());
 app.use(helmet.frameguard({ action: 'deny' }));
 
 
-
+middleware helmet.hidePoweredBy()
 
 
 
