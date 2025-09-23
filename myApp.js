@@ -1,14 +1,9 @@
 const express = require('express');
-const app = express();
-app.use(helmet.hidePoweredBy());
 const helmet = require('helmet');
+const app = express();
 app.use(helmet.hidePoweredBy());
 app.use(helmet());
 app.use(helmet.frameguard({ action: 'deny' }));
-
-  
-
-
 
 
 
