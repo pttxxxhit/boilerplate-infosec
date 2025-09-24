@@ -4,7 +4,7 @@ const app = express();
 app.use(helmet.hidePoweredBy());
 app.use(helmet.xssFilter({}));
 app.use(helmet.noSniff())));
-ninetyDaysInSeconds = 90*24*60*60
+var ninetyDaysInSeconds = 90*24*60*60
 app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds, force: true }));
 app.use(helmet.ieNoOpen());
 app.use(helmet());
