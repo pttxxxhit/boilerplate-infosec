@@ -4,7 +4,7 @@ const app = express();
 app.use(helmet.hidePoweredBy());
 app.use(helmet());
 app.use(helmet.frameguard({ action: 'deny' }));
-
+helmet.xssFilter()
 
 
 
