@@ -2,34 +2,35 @@ var express = require('express');
 var app = express();
 var helmet = require('helmet');
 
-// Oculta el encabezado X-Powered-By
-app.use(helmet.hidePoweredBy());
+// Middleware de seguridad
+app.use(helmet());
 
-// Previene ataques XSS
-app.use(helmet.xssFilter({}));
-
-// Evita sniffing de tipos MIME
-app.use(helmet.noSniff());
-
-// Bloquea apertura de archivos inseguros en IE
-app.use(helmet.ieNoOpen());
-
-// Protege contra clickjacking
-app.use(helmet.frameguard({ action: 'deny' }));
-
-// Configura HSTS por 90 días con force: true
+// Configurar HSTS por 90 días
 var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
-app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds, force: true }));
+app.use(helmet.hsts({
+  maxAge: ninetyDaysInSeconds,
+  force: true
+}));
 
-// Exporta la app para que pueda ser testeada
+// Servir archivos estáticos
+app.use(express.static('public'));
+
+// API interna
+const api = require('./server.js');
+app.use('/_api', api);
+
+// Ruta principal
+app.get("/", function (request, response) {
+  response.sendFile(__dirname + '/views/index.html');
+});
+
+// Puerto de escucha
+let port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Your app is listening on port ${port}`);
+});
+
 module.exports = app;
-
-
-
-
-
-
-
 
 
 
