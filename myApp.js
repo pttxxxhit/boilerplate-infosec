@@ -1,19 +1,28 @@
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60; // Definimos la variable
-const express = require('express');
-const helmet = require('helmet');
-const app = express();
+var express = require('express');
+var app = express();
+var helmet = require('helmet');
+
+// Oculta el encabezado X-Powered-By
 app.use(helmet.hidePoweredBy());
+
+// Previene ataques XSS
 app.use(helmet.xssFilter({}));
-app.use(helmet.noSniff())));
+
+// Evita sniffing de tipos MIME
+app.use(helmet.noSniff());
+
+// Bloquea apertura de archivos inseguros en IE
 app.use(helmet.ieNoOpen());
-app.use(helmet());
+
+// Protege contra clickjacking
 app.use(helmet.frameguard({ action: 'deny' }));
-// Montamos el middleware sin la opción force: true
-app.use(
-  helmet.hsts({
-    maxAge: ninetyDaysInSeconds,
-  })
-);
+
+// Configura HSTS por 90 días con force: true
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds, force: true }));
+
+// Exporta la app para que pueda ser testeada
+module.exports = app;
 
 
 
