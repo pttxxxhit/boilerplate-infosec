@@ -1,26 +1,36 @@
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60; // Definimos la variable
-const express = require('express');
-const helmet = require('helmet');
-const app = express();
-app.use(helmet.hidePoweredBy());
-app.use(helmet.xssFilter({}));
-app.use(helmet.noSniff())));
-app.use(helmet.ieNoOpen());
+var express = require('express');
+var app = express();
+var helmet = require('helmet');
+
+// Middleware de seguridad
 app.use(helmet());
-app.use(helmet.frameguard({ action: 'deny' }));
-// Montamos el middleware sin la opción force: true
-app.use(
-  helmet.hsts({
-    maxAge: ninetyDaysInSeconds,
-  })
-);
 
+// Configurar HSTS por 90 días
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+app.use(helmet.hsts({
+  maxAge: ninetyDaysInSeconds,
+  force: true
+}));
 
+// Servir archivos estáticos
+app.use(express.static('public'));
 
+// API interna
+const api = require('./server.js');
+app.use('/_api', api);
 
+// Ruta principal
+app.get("/", function (request, response) {
+  response.sendFile(__dirname + '/views/index.html');
+});
 
+// Puerto de escucha
+let port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Your app is listening on port ${port}`);
+});
 
-
+module.exports = app;
 
 
 
