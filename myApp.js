@@ -1,30 +1,21 @@
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60; // Definimos la variable
 const express = require('express');
 const helmet = require('helmet');
+
 const app = express();
+const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+
+// Configuración de Helmet
 app.use(helmet.hidePoweredBy());
-app.use(helmet.xssFilter({}));
-app.use(helmet.noSniff())));
+app.use(helmet.xssFilter()); // No necesita objeto vacío
+app.use(helmet.noSniff());   // Se corrigió paréntesis extra
 app.use(helmet.ieNoOpen());
-app.use(helmet());
 app.use(helmet.frameguard({ action: 'deny' }));
-// Montamos el middleware sin la opción force: true
 app.use(
   helmet.hsts({
     maxAge: ninetyDaysInSeconds,
+    force: true, // Activamos HSTS con HTTPS obligatorio
   })
 );
-
-
-
-
-
-
-
-
-
-
-
 
 
 
