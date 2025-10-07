@@ -1,22 +1,36 @@
-const express = require('express');
-const helmet = require('helmet');
+var express = require('express');
+var helmet = require('helmet');
 
-const app = express();
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+var app = express();
+
 
 // Configuración de Helmet
 app.use(helmet.hidePoweredBy());
 app.use(helmet.xssFilter()); // No necesita objeto vacío
 app.use(helmet.noSniff());   // Se corrigió paréntesis extra
 app.use(helmet.ieNoOpen());
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 app.use(helmet.frameguard({ action: 'deny' }));
-app.use(
-  helmet.hsts({
-    maxAge: ninetyDaysInSeconds,
-    force: true, // Activamos HSTS con HTTPS obligatorio
-  })
-);
+app.use(helmet.hsts({
+  maxAge: ninetyDaysInSeconds,
+  force: true
+}));
 
+
+
+var express = require('express');
+var helmet = require('helmet');
+
+var app = express();
+
+// 👇 Esta es la línea que debes agregar justo después de la séptima instrucción
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+
+// 👇 Y esta es la línea que activa HSTS con la configuración correcta
+app.use(helmet.hsts({
+  maxAge: ninetyDaysInSeconds,
+  force: true
+}));
 
 
 
