@@ -1,11 +1,16 @@
-const express = require('express');
-const helmet  = require('helmet');
-const api     = require('./server.js'); // tu API o rutas
+var express = require('express');
+var helmet  = require('helmet');
+var api     = require('./server.js');
 
-const app = express();
+var app = express();
 
-// HSTS: fuerza HTTPS durante los próximos 90 días
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+// 1–7. (Aquí estarían tus primeras siete líneas de configuración: middleware, rutas, etc.)
+// ...
+
+// 8. Definimos el tiempo de HSTS (90 días en segundos)
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+
+// 9. Activamos HSTS con Helmet
 app.use(
   helmet.hsts({
     maxAge: ninetyDaysInSeconds,
@@ -13,45 +18,21 @@ app.use(
   })
 );
 
-// servir archivos estáticos desde /public
+// 10. Servir carpeta de archivos estáticos
 app.use(express.static('public'));
 
-// rutas de tu API
+// 11. Montar tu router de API
 app.use('/_api', api);
 
-// página principal
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+// 12. Ruta principal
+app.get('/', function (request, response) {
+  response.sendFile(__dirname + '/views/index.html');
 });
 
-// arrancar el servidor
-const port = process.env.PORT || 3000;
+// 13. Arrancar el servidor
+let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Your app is listening on port ${port}`);
 });
 
-// exportar app para tests o integraciones
 module.exports = app;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
