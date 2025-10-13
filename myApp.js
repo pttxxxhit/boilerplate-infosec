@@ -1,32 +1,30 @@
-// myApp.js
 const express = require('express');
 const helmet  = require('helmet');
-const path    = require('path');
-const api     = require('./api.js');   // Importa el Router, no la misma app
+const app     = express();
 
-const app = express();
-
-// Aplica HSTS global (90 días)
-const ninetyDays = 90 * 24 * 60 * 60;
+// HSTS: fuerza HTTPS durante los próximos 90 días
+const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 app.use(
   helmet.hsts({
-    maxAge: ninetyDays,
+    maxAge: ninetyDaysInSeconds,
     force: true
   })
 );
 
-// Sirve archivos estáticos desde /public
-app.use(express.static(path.join(__dirname, 'public')));
+const api = require('./server.js'); 
 
-// Monta el router de API
-app.use('/_api', api);
+// servir archivos estáticos
+app.use(express.static('public')); 
 
-// Página principal
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+// montar la API
+app.use('/_api', api);  
+
+// ruta principal
+app.get("/", (request, response) => {
+  response.sendFile(__dirname + '/views/index.html');
 });
 
-// Arranca el servidor
+// arrancar servidor
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Your app is listening on port ${port}`);
