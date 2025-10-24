@@ -8,11 +8,15 @@ app.use(helmet.hidePoweredBy());
 app.use(helmet.frameguard({ action: 'deny' }));
 app.use(helmet.xssFilter());
 app.use(helmet.noSniff());
+
+// ✅ HSTS con variable y force:true
+const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 app.use(helmet.hsts({
-  maxAge: 7776000
+  maxAge: ninetyDaysInSeconds,
+  force: true
 }));
 
-// Ruta principal (no modificar el archivo HTML)
+// Ruta principal
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
