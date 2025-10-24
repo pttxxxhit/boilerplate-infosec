@@ -1,27 +1,23 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
 const helmet = require('helmet');
+const app = express();
 
-// HSTS: fuerza HTTPS por 90 días
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+// Seguridad con Helmet
+app.use(helmet.hidePoweredBy());
+app.use(helmet.frameguard({ action: 'deny' }));
+app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
 app.use(helmet.hsts({
-  maxAge: ninetyDaysInSeconds,
-  force: true
+  maxAge: 7776000
 }));
 
-// Otras configuraciones de seguridad
-app.use(helmet.hidePoweredBy());
-app.use(helmet.noSniff());
-app.use(helmet.xssFilter());
-app.use(helmet.frameguard({ action: 'deny' }));
-
-// Ruta principal
+// Ruta principal (no modificar el archivo HTML)
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-// Ruta de prueba
+// Ruta JSON requerida por el test
 app.get('/json', (req, res) => {
   res.json({ message: "Hello json" });
 });
@@ -31,3 +27,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
+
+module.exports = app;
