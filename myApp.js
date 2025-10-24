@@ -1,39 +1,29 @@
+require('dotenv').config();
 const express = require('express');
-const helmet  = require('helmet');
-// MyApp.js
-const express = require('express');
-const helmet  = require('helmet');
-const path    = require('path');
-
 const app = express();
+const helmet = require('helmet');
 
-// 1. HSTS: fuerza HTTPS durante los próximos 90 días
+// HSTS: fuerza HTTPS por 90 días
 const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
-app.use(
-  helmet.hsts({
-    maxAge: ninetyDaysInSeconds,
-    force: true
-  })
-);
+app.use(helmet.hsts({
+  maxAge: ninetyDaysInSeconds,
+  force: true
+}));
 
-// 2. Sirve archivos estáticos desde /public
-app.use(express.static(path.join(__dirname, 'public')));
+// Otras configuraciones de seguridad
+app.use(helmet.hidePoweredBy());
+app.use(helmet.noSniff());
+app.use(helmet.xssFilter());
+app.use(helmet.frameguard({ action: 'deny' }));
 
-// 3. API inline (anida aquí todas tus rutas de API)
-app.get('/_api', (req, res) => {
-  // ejemplo de respuesta, extiende según necesites
-  res.json({ message: 'API funcionando con HSTS activo' });
-});
-
-// 4. Ruta principal para tu HTML
+// Ruta principal
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'views', 'index.html'));
+  res.sendFile(__dirname + '/views/index.html');
 });
 
-// 5. Arranque del servidor
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Your app is listening on port ${port}`);
+// Ruta de prueba
+app.get('/json', (req, res) => {
+  res.json({ message: "Hello json" });
 });
 
 module.exports = app;
