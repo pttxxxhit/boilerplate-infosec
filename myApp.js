@@ -3,14 +3,14 @@ const express = require('express');
 const helmet = require('helmet');
 const app = express();
 
-// Seguridad con Helmet
+// Instrucciones de seguridad con Helmet
 app.use(helmet.hidePoweredBy());
 app.use(helmet.frameguard({ action: 'deny' }));
 app.use(helmet.xssFilter());
 app.use(helmet.noSniff());
 
-// ✅ HSTS con variable y force:true
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+// ✅ Esta es la séptima instrucción: HSTS con variable y force:true
+var ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 app.use(helmet.hsts({
   maxAge: ninetyDaysInSeconds,
   force: true
