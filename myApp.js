@@ -26,7 +26,7 @@ app.get('/json', (req, res) => {
   res.json({ message: "Hello json" });
 });
 
-module.exports = app;
+// Escuchar en el puerto
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
