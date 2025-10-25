@@ -9,7 +9,8 @@ app.use(helmet.noSniff()); // ← paso anterior
 app.use(helmet.ieNoOpen()); // ← paso anterior
 var ninetyDaysInSeconds = 90 * 24 * 60 * 60; // ← paso anterior
 app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds, force: true })); // ← paso anterior
-app.use(helmet.dnsPrefetchControl()); // ← paso actual
+app.use(helmet.dnsPrefetchControl()); // ← paso anterior
+app.use(helmet.noCache()); // ← paso actual
 
 module.exports = app;
 const api = require('./server.js');
